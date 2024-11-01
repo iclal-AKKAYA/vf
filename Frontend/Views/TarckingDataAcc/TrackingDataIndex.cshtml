@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Tedarikçiler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+    <link href="~/lib/datatables/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/datatables/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+}
+@model Tuple<List<Vehicles>,List<TrackingDataForStd>>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-title-box">
+                <div class="row">
+                    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+                    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+                    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            // Varsayılan tarih
+                            var start = moment();
+                            var end = moment();
+
+                            // Seçilen tarihi gösteren fonksiyon
+                            function updateSelectedDate(start, end) {
+                                $('#Day_Name').html(start.format('MMMM D, YYYY')); // Tarih formatını burada ayarlayabilirsin
+                                $('#Select_date').html(end.format('MMMM D, YYYY'));
+                            }
+
+                            // Date range picker başlatma
+                            $('#Dash_Date').daterangepicker({
+                                startDate: start,
+                                endDate: end,
+                                ranges: {
+                                    'Bugün': [moment(), moment()],
+                                    'Dün': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                    'Bu Hafta': [moment().subtract(6, 'days'), moment()],
+                                    'Son 30 Gün': [moment().subtract(29, 'days'), moment()],
+                                    'Bu Ay': [moment().startOf('month'), moment().endOf('month')],
+                                    'Geçen Ay': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                                }
+                            }, updateSelectedDate);
+
+                            // Varsayılan seçili tarihleri göster
+                            updateSelectedDate(start, end);
+                        });
+                    </script>
+
+
+                    
+                    @*<script type="text/javascript">
+                        $(document).ready(function () {
+
+                            var start = moment();
+                            var end = moment();
+
+                            function cb(start, end) {
+                                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                            }
+
+                            $('#reportrange').daterangepicker({
+                                startDate: start,
+                                endDate: end,
+                                ranges: {
+                                    'Bugün': [moment(), moment()],
+                                    'Dün': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                    'Bu Hafta': [moment().subtract(6, 'days'), moment()],
+                                    'Son 30 Gün': [moment().subtract(29, 'days'), moment()],
+                                    'Bu Ay': [moment().startOf('month'), moment().endOf('month')],
+                                    'Geçen Ay': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                                }
+                            }, cb);
+
+                            cb(start, end);
+                        });
+                    </script>*@
+                    <div style="display:flex;">
+                        <div style="">
+                            <select name="vehicleSelected" class="form-select" id="vehicleSelected">
+                                @foreach (var items in Model.Item1)
+                                {
+                                    <option value="@items.VehicleId">@items.Plate</option>
+                                }
+                            </select>
+                        </div>
+                        @*<div style="width:35%;">
+                            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+                            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                        </div>
+                        <div style="width:15%;">
+                            <button type="button" id="showDataBtn" class="btn btn-soft-primary btn-md">Göster</button>
+                        </div>*@
+                        <div style="" class="col-auto align-self-center">
+                            <a href="#" class="btn btn-sm btn-outline-primary" id="Dash_Date">
+                                <span class="day-name" id="Day_Name">Today:</span>&nbsp;
+                                <span class="" id="Select_date">Jan 11</span>
+                                <i data-feather="calendar" class="align-self-center icon-xs ms-1"></i>
+                            </a>
+                        </div>
+                        <div style="">
+                            <button type="button" id="showDataBtn" class="btn btn-soft-primary btn-md">Göster</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div id="partial">
+                    <!-- AJAX ile gelen içerik buraya yüklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/dataTables.bootstrap5.min.js"></script>
+    <script src="~/lib/datatables/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables/buttons.bootstrap5.min.js"></script>
+    <script src="~/lib/datatables/jszip.min.js"></script>
+    <script src="~/lib/datatables/pdfmake.min.js"></script>
+    <script src="~/lib/datatables/vfs_fonts.js"></script>
+    <script src="~/lib/datatables/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables/buttons.print.min.js"></script>
+    <script src="~/lib/datatables/buttons.colVis.min.js"></script>
+    <script src="~/lib/datatables/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables/responsive.bootstrap4.min.js"></script>
+    <script src="~/js/pages/jquery.datatable.init.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#showDataBtn').on('click', function () {
+                var vehicleId = $('#vehicleSelected').val();
+               // var dateRange = $('#reportrange span').html().split(" - ");
+                var firstDate = $('#Day_Name').text().replace('Today:', '').trim(); // Başlangıç tarihini al
+                var lastDate = $('#Select_date').text().trim(); // Bitiş tarihini al
+                //var firstDate = dateRange[0]; // İlk tarih
+                //var lastDate = dateRange[1];  // Son tarih
+
+                $.ajax({
+                    url: '@Url.Action("FiltreIndex", "TarckingDataAcc")', // Controller ismi ve action burada yer alacak
+                    type: 'POST',
+                    data: {
+                        id: vehicleId,
+                        firstDate: firstDate,
+                        lastDate: lastDate
+                    }, beforeSend: function () {
+                        // AJAX isteğinden önce div'in içeriğini boşaltıyoruz
+                        $('#partial').empty();
+                    },
+                    success: function (result) {
+                        // Partial view'i al ve div'e yerleştir
+                        $('#partial').html(result);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Hata:', error);
+                    }
+                });
+            });
+        });
+    </script>
+    
+}
+

@@ -1,0 +1,212 @@
+﻿<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<select id="num" class="form-select">
+    <!-- 1'den 18'e kadar olan seçenekler -->
+    <option value="13" disabled selected>Harita Görünümü</option>
+    <option value="1">Tüm Dünya Görünümü</option>
+    <option value="5">Ülke Görünümü</option>
+    <option value="13">Şehir Görünümü</option>
+    <option value="18">Sokak Görünümü</option>
+</select>
+<div id="map" style="height: 360px; position: relative; z-index: 1;"></div>
+<script>
+    let maxLatitude, minLongitude;
+    var map = L.map('map').setView([0, 0], 1);
+    let data = null;
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var markers = L.layerGroup().addTo(map);
+
+    async function setData() {
+        try {
+            let response = await fetch('/TarckingDataAcc/index'); 
+            data = await response.json();
+            maxLatitude = -Infinity;
+            minLongitude = Infinity;
+
+            var num = document.getElementById("num").value;
+            var intNum = parseInt(num, 10);
+            data.forEach(item => {
+                if (item.trackingDataForStd) {
+                    if (item.trackingDataForStd.latitude > maxLatitude) {
+                        maxLatitude = item.trackingDataForStd.latitude;
+                    }
+                    if (item.trackingDataForStd.longitude < minLongitude) {
+                        minLongitude = item.trackingDataForStd.longitude;
+                    }
+                }
+            });
+            map.setView([maxLatitude, minLongitude], intNum);
+            markers.clearLayers();
+            fetchData();
+        } catch (error) {
+            console.error("Data fetch error:", error);
+        }
+    }
+
+    document.getElementById("num").addEventListener("change", function () {
+        var selectedValue = this.value;
+        var intNum = parseInt(selectedValue, 10);
+        map.setView([maxLatitude, minLongitude], intNum);
+    });
+
+    async function fetchData() {
+        data.forEach(item => {
+            if (item.trackingDataForStd) {
+                var marker = L.marker([item.trackingDataForStd.latitude, item.trackingDataForStd.longitude])
+                    .bindPopup(item.vehicles.plate);
+                markers.addLayer(marker);
+            }
+        });
+    }
+    setData();
+    setInterval(setData, 30000);
+</script>
+
+@*<script>
+    debugger;
+    let maxLatitude = -Infinity;
+    let minLongitude = Infinity;
+    var num = document.getElementById("num").value;
+    var intNum = parseInt(num, 10);
+    let data=null;
+    var map = L.map('map');
+    async function setData(){
+        let response = await fetch('/TarckingDataAcc/index'); // API endpoint URL
+        data = await response.json();
+        var num = document.getElementById("num").value;
+        var intNum = parseInt(num, 10);
+        document.getElementById("num").addEventListener("change", function () {
+            var selectedValue = this.value;
+            intNum = parseInt(selectedValue, 10);
+            map.setView([maxLatitude, minLongitude], intNum);
+        });
+        data.forEach(item => {
+            debugger;
+            if (item.trackingDataForStd) {
+            if (item.trackingDataForStd.latitude > maxLatitude) {
+                maxLatitude = item.trackingDataForStd.latitude;
+            }
+            if (item.trackingDataForStd.longitude < minLongitude) {
+                minLongitude = item.trackingDataForStd.longitude;
+            }
+            }
+        });
+        map.setView([maxLatitude, minLongitude], intNum);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);//koordinatlar ve plakalar foreach
+        fetchData();
+    }
+    setData();
+    setInterval(function () {
+        debugger;
+        setData();
+        var num = document.getElementById("num").value;
+        var intNum = parseInt(num, 10);
+        document.getElementById("num").addEventListener("change", function () {
+            var selectedValue = this.value;
+            intNum = parseInt(selectedValue, 10);
+            map.setView([maxLatitude, minLongitude], intNum);
+        });
+        data.forEach(item => {
+            debugger;
+            if (item.trackingDataForStd) {
+            if (item.trackingDataForStd.latitude > maxLatitude) {
+                maxLatitude = item.trackingDataForStd.latitude;
+            }
+            if (item.trackingDataForStd.longitude < minLongitude) {
+                minLongitude = item.trackingDataForStd.longitude;
+            }
+            }
+        });
+        map.setView([maxLatitude, minLongitude], intNum);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);//koordinatlar ve plakalar foreach
+            fetchData();
+    }, 30000);
+        async function fetchData() {
+            debugger;
+            data.forEach(item => {
+            if (item.trackingDataForStd) {
+                var marker = L.marker([item.trackingDataForStd.latitude, item.trackingDataForStd.longitude]).addTo(map)
+                    .bindPopup(item.vehicles.plate)
+                    .openPopup();
+            }
+            });
+        }
+
+        //async function setData() {
+        //    let response = await fetch('/TarckingDataAcc/index');
+        //    if (!response.ok) {
+        //        throw new Error('Network response was not ok');
+        //    }
+        //    let data = await response.json();
+
+        //    data.forEach(item => {
+        //        console.log("Alınan Son güncel veri :" + item.trackingDataForStd.serialNumber);
+        //        debugger;
+        //        // En büyük Latitude değerini bulma
+        //        if (item.trackingDataForStd.latitude > maxLatitude) {
+        //            maxLatitude = item.trackingDataForStd.latitude;
+        //        }
+
+        //        // En küçük Longitude değerini bulma
+        //        if (item.trackingDataForStd.longitude < minLongitude) {
+        //            minLongitude = item.trackingDataForStd.longitude;
+        //        }
+        //        map.setView([maxLatitude, minLongitude], intNum);
+        //        console.log("Veri:" + item.trackingDataForStd);
+        //        var latitude = item.trackingDataForStd.latitude || 0; // Varsayılan değer
+        //        var longitude = item.trackingDataForStd.longitude || 0; // Varsayılan değer
+
+        //        if (latitude !== 0 && longitude !== 0) {
+        //            L.marker([latitude, longitude]).addTo(map)
+        //                .bindPopup(item.vehicles.plate) // Dinamik içerik
+        //                .openPopup();
+        //        } else {
+        //            console.error('Invalid data:', item);
+        //        }
+        //    });
+        //};
+
+
+        //let response = await fetch('/TarckingDataAcc/index');
+        //if (!response.ok) {
+        //    throw new Error('Network response was not ok');
+        //}
+        //let data = await response.json();
+        //try {
+        //    debugger;
+        //    data.forEach(items => {
+        //        debugger;
+        //        if (items.trackingDataForStd.latitude > maxLatitude) {
+        //            maxLatitude = items.trackingDataForStd.latitude;
+        //        }
+
+        //        // En küçük Longitude değerini bulma
+        //        if (items.trackingDataForStd.longitude < minLongitude) {
+        //            minLongitude = items.trackingDataForStd.longitude;
+        //        }
+        //    });
+        //    map.setView([maxLatitude, minLongitude], intNum);
+        //    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        //    }).addTo(map);//koordinatlar ve plakalar foreach
+        //    document.getElementById("num").addEventListener("change", function () {
+        //        debugger;
+        //        var selectedValue = this.value;
+        //        intNum = parseInt(selectedValue, 10);
+        //        map.setView([maxLatitude, minLongitude], intNum);
+        //    });
+        //} catch (error) {
+        //    console.error('Fetch error:', error);
+        //}
+</script>*@
