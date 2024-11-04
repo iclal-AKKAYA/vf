@@ -210,5 +210,21 @@
   "Pin Aktif": "Pin Active",
   "Pin Kapalı": "Pin Inactive",
   "Gösterilecek kayıt bulunamadı.": "No records to display.",
-  "Bağlı Değil": "Not Connected"
+  "Bağlı Değil": "Not Connected",
+  "Yönetim Paneli": "Administration Panel",
+  "Kiralık Değil": "Not Rent",
+  "Kiralık mı": "Is It For Rent",
+  "Evet": "Yes",
+  "Hayır": "No",
+  "Kaydederken hata oluştu": "Error Saving",
+  "Kayıtlarınız güvende": "Your records are safe",
+  "İptal": "Cancel",
+  "hata": "error",
+  "Emin misiniz?": "Are you sure?",
+  "Kaydetme işlemi yapmaktasınız kaydı geri alamazsınız!": "You are recording, you cannot undo the recording!",
+  "Evet, Kaydet!": "Yes, Save!",
+  "Hayır, Kaydetme!": "No, Don't Save!",
+  "Kaydedildi": "Recorded",
+  "başarılı": "successful",
+  "Hata": "Error"
 }

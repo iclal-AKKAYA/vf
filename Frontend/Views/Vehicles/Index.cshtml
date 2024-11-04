@@ -17,8 +17,8 @@
                     <div class="col">
                         <h4 class="page-title">@Localizer["Araçlar"]</h4>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0);">Araç Yönetimi</a></li>
-                            <li class="breadcrumb-item active">Araçlar</li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">@Localizer["Araç Yönetimi"]</a></li>
+                            <li class="breadcrumb-item active">@Localizer["Araçlar"]</li>
                         </ol>
                     </div>
                 </div>
@@ -69,11 +69,11 @@
                                     <td>@item.FirstKilometer</td>
                                     @if (item.IsThereDriver)
                                     {
-                                        <td>@Localizer["Sürücüsü Var"]</td>
+                                        <td>@Localizer["Evet"]</td>
                                     }
                                     else
                                     {
-                                        <td>@Localizer["Sürücüsü Yok"]</td>
+                                        <td>@Localizer["Hayır"]</td>
                                     }
                                     @if (item.IsItForRent!=null&&item.IsItForRent==true)
                                     {

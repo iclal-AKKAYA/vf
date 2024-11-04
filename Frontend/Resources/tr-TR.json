@@ -176,9 +176,11 @@
   "Araç Takip Verileri": "Araç Takip Verileri",
   "Şasi Numarası": "Şasi Numarası",
   "Model Yılı": "Model Yılı",
-  "Kontak Açık": "Ignition On",
-  "Kontak Kapalı": "Ignition Off",
+  "Kontak Açık": "Kontak Açık",
+  "Kontak Kapalı": "Kontak Kapalı",
   "Pin Aktif": "Pin Aktif",
   "Pin Kapalı": "Pin Kapalı",
-  "Gösterilecek kayıt bulunamadı.": "Gösterilecek kayıt bulunamadı."
+  "Gösterilecek kayıt bulunamadı.": "Gösterilecek kayıt bulunamadı.",
+  "Harita Görünümü": "Harita Görünümü"
+
 }

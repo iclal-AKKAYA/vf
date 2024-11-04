@@ -1,12 +1,12 @@
 ﻿function create(uri, model,action) {
  
     swal.fire({
-        title: 'Emin misiniz?',
-        text: "Kaydetme işlemi yapmaktasınız kaydı geri alamazsınız!",
-        type: 'warning',
+        title: '@Localizer["Emin misiniz?"]',
+        text: '@Localizer["Kaydetme işlemi yapmaktasınız kaydı geri alamazsınız!"]',
+        type: '@Localizer["hata"]',
         showCancelButton: true,
-        confirmButtonText: 'Evet, Kaydet!',
-        cancelButtonText: 'Hayır,Kaydetme!',
+        confirmButtonText: '@Localizer["Evet, Kaydet!"]',
+        cancelButtonText: '@Localizer["Hayır, Kaydetme!"]',
         reverseButtons: true
     }).then(function (result) {
         if (result.value) {
@@ -17,18 +17,18 @@
                 contentType: 'application/json',
                 success: function (response) {
                     Swal.fire(
-                        'Kaydedildi!',
-                        'Kaydetme Başarılı.',
-                        'success'
+                        '@Localizer["Kaydedildi!"]',
+                        '@Localizer["Kaydetme Başarılı."]',
+                        '@Localizer["başarılı"]'
                     ).then(() => {
                         window.location.href = action;
                     });
                 },
                 error: function () {
                     Swal.fire(
-                        'Hata!',
-                        'Kaydederken hata oluştu.',
-                        'hata'
+                        '@Localizer["Hata!"]',
+                        '@Localizer["Kaydederken hata oluştu."]',
+                        '@Localizer["hata"]'
                     );
                 }
             });
@@ -36,9 +36,9 @@
             result.dismiss === Swal.DismissReason.cancel
         ) {
             swal.fire(
-                'İptal',
-                'Kayıtlarınız güvende:)',
-                'hata'
+                '@Localizer["İptal"]',
+                '@Localizer["Kayıtlarınız güvende:)"]',
+                '@Localizer["hata"]'
             )
         }
     })
